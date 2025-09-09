@@ -1,41 +1,57 @@
-# Multi-stage Dockerfile for Next.js (Node 20 on Alpine)
+###############
+# Build Stage #
+###############
+FROM node:18-alpine AS builder
 
-######## deps ########
-FROM node:20-alpine AS deps
+# Set working directory
 WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN sh -c "npm ci || npm install"
 
-######## build ########
-FROM node:20-alpine AS builder
-WORKDIR /app
-ENV NEXT_TELEMETRY_DISABLED=1
-COPY --from=deps /app/node_modules ./node_modules
+# Copy package files first for better Docker layer caching
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --silent
+
+# Copy configuration files (if you have them)
+COPY tsconfig.json ./
+COPY tailwind.config.* ./
+COPY postcss.config.* ./
+COPY next.config.* ./
+
+# Copy source code
 COPY . .
+
+# Build the Next.js app
 RUN npm run build
 
-######## prod-deps ########
-FROM node:20-alpine AS prod-deps
+######################
+# Production Stage   #
+######################
+FROM node:18-alpine AS production
+
+# Add non-root user for security
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
 WORKDIR /app
-COPY package.json package-lock.json* ./
-COPY --from=deps /app/node_modules ./node_modules
-RUN npm prune --omit=dev || npm prune --production
 
-######## runtime ########
-FROM node:20-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
+# Copy package files and install only production dependencies
+COPY package*.json ./
+RUN npm ci --only=production --silent && npm cache clean --force
 
-RUN addgroup -g 1001 -S nodejs \
-	&& adduser -S nextjs -u 1001
+# Copy built application from builder stage
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/next.config.* ./
 
-COPY --from=prod-deps /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/next.config.js ./next.config.js
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
+# Switch to non-root user
+USER nextjs
 
 EXPOSE 3000
-USER nextjs
+
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# Use npm start like your working service
 CMD ["npm", "run", "start"]
