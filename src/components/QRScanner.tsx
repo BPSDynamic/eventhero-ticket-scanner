@@ -13,15 +13,16 @@ export const QRScanner: React.FC<QRScannerProps> = ({
     deviceId,
     facingMode = 'environment'
 }) => {
-    const scannerRef = useRef<any>(null)
+    const scannerRef = useRef<HTMLDivElement>(null)
 
-    const handleScan = (data: any) => {
+    const handleScan = (data: string | { text: string } | null) => {
         if (data) {
-            onResult(data.text || data)
+            const result = typeof data === 'string' ? data : data.text
+            onResult(result)
         }
     }
 
-    const handleError = (err: any) => {
+    const handleError = (err: Error) => {
         console.error('QR Scanner error:', err)
     }
 

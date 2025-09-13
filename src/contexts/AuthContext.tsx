@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import { signIn, signOut, getCurrentUser } from 'aws-amplify/auth'
 
 type AuthContextType = {
-  user: any
+  user: unknown
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
@@ -11,7 +11,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<unknown>(null)
   const [loading, setLoading] = useState(true)
   const lastActiveRef = useRef<number>(0)
   const INACTIVITY_LIMIT_MS = 15 * 60 * 1000

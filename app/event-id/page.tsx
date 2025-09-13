@@ -54,43 +54,90 @@ export default function EventIdPage() {
     }, [])
 
     return (
-        <Container size="xs" style={{minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
-            <div className="pt-10 pb-6 text-center">
-                <EventheroLogoIcon width={160} height={86} color="#0D091A"/>
+        <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
+            {/* Ultra-Compact Header */}
+            <div className="bg-white border-b border-gray-100 px-4 py-2 flex items-center justify-center">
+                <EventheroLogoIcon width={140} height={46} color="#0000FF"/>
             </div>
-            <div style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                paddingBottom: '2rem'
-            }}>
-                <Stack align="center" gap="xl">
-                    <Title order={1} ta="center" size="1.75rem" fw={700} c="#0D091A">Event ID</Title>
-                    <Text ta="center" size="md" fw={300} c="#6B7280" style={{lineHeight: 1.4, maxWidth: 400, paddingHorizontal: 10}}>
-                        To start scanning the tickets, please enter the eventID associated with your event.
-                    </Text>
-                    <TextInput
-                        placeholder="Enter Event ID"
-                        value={eventId}
-                        onChange={handleInputChange}
-                        size="md"
-                        style={{width: '100%'}}
-                        styles={{ input: { height: 50, fontSize: '1rem', borderColor: '#D1D5DB', borderRadius: 8, color: '#0D091A' } }}
-                    />
-                    {error && (<Text c="red" ta="center" size="sm" fw={400}>{error}</Text>)}
-                    {loading ? (
-                        <div style={{ height: 52, display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                            <Loader size="lg" color="#0000FF"/>
-                        </div>
-                    ) : (
-                        <Button onClick={handleConfirm} disabled={!isButtonEnabled} size="md" fullWidth style={{ backgroundColor: isButtonEnabled ? '#0000FF' : '#E5E7EB', color: isButtonEnabled ? '#fff' : '#9CA3AF', height: 48, borderRadius: 10, fontSize: '1rem', fontWeight: 600 }}>
-                            Confirm
-                        </Button>
-                    )}
-                </Stack>
+            
+            {/* Main Content - Fits perfectly on mobile */}
+            <div className="flex-1 flex items-center justify-center px-3 py-2">
+                <div className="w-full max-w-xs bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                    {/* Compact Title */}
+                    <div className="text-center mb-4">
+                        <Title order={2} className="text-lg font-semibold text-gray-900 mb-1">
+                            Enter Event ID
+                        </Title>
+                        <Text className="text-xs text-gray-500">
+                            Start scanning tickets
+                        </Text>
+                    </div>
+
+                    {/* Input Section */}
+                    <div className="space-y-3">
+                        <TextInput
+                            placeholder="Event ID (e.g., EVT123456)"
+                            value={eventId}
+                            onChange={handleInputChange}
+                            size="sm"
+                            className="w-full"
+                            styles={{
+                                input: { 
+                                    height: 40, 
+                                    fontSize: '15px', 
+                                    borderColor: '#E5E7EB', 
+                                    borderRadius: 8,
+                                    backgroundColor: '#FFFFFF',
+                                    '&:focus': {
+                                        borderColor: '#0000FF',
+                                        boxShadow: '0 0 0 2px rgba(0, 0, 255, 0.08)'
+                                    }
+                                }
+                            }}
+                        />
+                        
+                        {error && (
+                            <div className="bg-red-50 border border-red-200 rounded-md p-2">
+                                <Text className="text-red-600 text-xs text-center">{error}</Text>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Action Button */}
+                    <div className="pt-3">
+                        {loading ? (
+                            <div className="h-9 flex items-center justify-center bg-gray-100 rounded-lg">
+                                <Loader size="xs" color="#0000FF" className="mr-1"/>
+                                <Text className="text-gray-600 text-sm">Searching...</Text>
+                            </div>
+                        ) : (
+                            <Button
+                                onClick={handleConfirm}
+                                disabled={!isButtonEnabled}
+                                size="sm"
+                                fullWidth
+                                className="h-9 text-sm font-medium"
+                                style={{ 
+                                    backgroundColor: isButtonEnabled ? '#0000FF' : '#E5E7EB',
+                                    color: isButtonEnabled ? '#FFFFFF' : '#9CA3AF',
+                                    borderRadius: 8,
+                                    border: 'none'
+                                }}
+                            >
+                                Find Event
+                            </Button>
+                        )}
+                    </div>
+
+                    {/* Helper Text */}
+                    <div className="text-center pt-3">
+                        <Text className="text-xs text-gray-400">
+                            Need help? Contact support
+                        </Text>
+                    </div>
+                </div>
             </div>
-        </Container>
+        </div>
     )
 }
 

@@ -178,7 +178,7 @@ export default function ScanPage() {
             <div style={{ position: 'absolute', top: 80, left: 20, right: 20, display: 'flex', justifyContent: 'center' }}>
                 <Text style={{ color: '#fff', fontSize: 16, textAlign: 'center', backgroundColor: qrDetected ? 'rgba(0,150,0,0.8)' : 'rgba(0,0,0,0.7)', padding: 12, borderRadius: 8, border: qrDetected ? '2px solid #00ff00' : 'none' }}>
                     {error || (isValidating ? 'Validating ticket...' :
-                        qrDetected ? 'QR Code detected! Tap "Scan QR Code" to proceed' : 'Point camera at QR code')}
+                        qrDetected ? 'QR Code detected! Tap &quot;Scan QR Code&quot; to proceed' : 'Point camera at QR code')}
                 </Text>
             </div>
             {availableCameras.length > 1 && (

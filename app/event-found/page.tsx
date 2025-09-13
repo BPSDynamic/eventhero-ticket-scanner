@@ -57,7 +57,7 @@ export default function EventFoundPage() {
                 </Card>
                 <Text ta="center" color="#6B7280" px="md">
                     Make sure this is the right one happening today.
-                    If it's not, try entering the Event ID again.
+                    If it&apos;s not, try entering the Event ID again.
                 </Text>
                 <Stack gap="md" style={{width: '100%'}}>
                     <Button fullWidth size="md" onClick={handleScanNow} style={{backgroundColor: '#0000FF', height: 48}}>Scan Now</Button>

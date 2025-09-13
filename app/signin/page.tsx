@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useAuth } from '../../src/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
-import { Container, TextInput, Button, Title, Text, Stack, Group, Loader, PasswordInput } from '@mantine/core'
+import { TextInput, Button, Title, Text, Loader, PasswordInput } from '@mantine/core'
 import { EventheroLogoIcon } from '../../src/components/icons/EventheroLogoIcon'
 
 export default function SignIn() {
@@ -27,64 +27,143 @@ export default function SignIn() {
   }
 
   const handleSignUp = () => {
-    window.open('https://m9vuvsxvc4.eu-west-1.awsapprunner.com/register', '_blank')
+    router.push('/signup')
   }
 
   const handleForgotPassword = () => {
-    window.open('https://m9vuvsxvc4.eu-west-1.awsapprunner.com/forgot-password', '_blank')
+    router.push('/forgot-password')
   }
 
   return (
-    <Container size="xs" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <div className="pt-10 pb-6 text-center">
-        <EventheroLogoIcon width={160} height={86} color="#0D091A" />
+    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
+      {/* Ultra-Compact Header */}
+      <div className="bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-center">
+        <EventheroLogoIcon width={70} height={38} color="#0000FF" />
       </div>
-      <div className="flex-1 flex flex-col justify-center pb-6">
-        <Title order={1} ta="center" mb="xl" size="1.5rem" fw={700} c="#0D091A">
-          Sign In
-        </Title>
-        <form onSubmit={handleSignIn}>
-          <Stack gap="sm">
-            <TextInput
-              label="Email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => { setEmail(e.target.value); setError('') }}
-              size="md"
-              styles={{
-                label: { fontSize: '0.75rem', color: '#9CA1AA', marginBottom: 6 },
-                input: { height: 52, paddingTop: 14, fontSize: '1rem', borderColor: '#9CA1AA', borderRadius: 12 }
-              }}
-              type="email"
-              autoComplete="email"
-            />
-            <PasswordInput
-              label="Password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => { setPassword(e.target.value); setError('') }}
-              size="md"
-              styles={{
-                label: { fontSize: '0.75rem', color: '#9CA1AA', marginBottom: 6 },
-                input: { height: 52, paddingTop: 14, fontSize: '1rem', borderColor: '#9CA1AA', borderRadius: 12 }
-              }}
-            />
-            <Group justify="space-between" mt="xs" mb="md">
-              <Button variant="subtle" size="sm" onClick={handleSignUp} style={{ color: '#0000FF', fontWeight: 500 }}>Sign Up</Button>
-              <Button variant="subtle" size="sm" onClick={handleForgotPassword} style={{ color: '#0000FF', fontWeight: 500 }}>Forgot Password?</Button>
-            </Group>
-            {error && (<Text c="red" ta="center" size="sm" mb="md">{error}</Text>)}
-            {loading ? (
-              <div style={{ textAlign: 'center', padding: '1rem' }}>
-                <Loader size="lg" color="#0000FF" />
+
+      {/* Main Content - Optimized for mobile viewport */}
+      <div className="flex-1 flex items-center justify-center px-4 py-3">
+        <div className="w-full max-w-xs bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          {/* Compact Title */}
+          <div className="text-center mb-4">
+            <Title order={2} className="text-lg font-semibold text-gray-900 mb-1">
+              Welcome Back
+            </Title>
+            <Text className="text-xs text-gray-500">
+              Sign in to continue
+            </Text>
+          </div>
+
+          <form onSubmit={handleSignIn} className="space-y-3">
+            {/* Compact Email Input */}
+            <div>
+              <TextInput
+                placeholder="Email"
+                value={email}
+                onChange={(e) => { setEmail(e.target.value); setError('') }}
+                size="sm"
+                className="w-full"
+                styles={{
+                  input: { 
+                    height: 40, 
+                    fontSize: '15px', 
+                    borderColor: '#E5E7EB', 
+                    borderRadius: 8,
+                    '&:focus': {
+                      borderColor: '#0000FF',
+                      boxShadow: '0 0 0 2px rgba(0, 0, 255, 0.1)'
+                    }
+                  }
+                }}
+                type="email"
+                autoComplete="email"
+                required
+              />
+            </div>
+
+            {/* Compact Password Input */}
+            <div>
+              <PasswordInput
+                placeholder="Password"
+                value={password}
+                onChange={(e) => { setPassword(e.target.value); setError('') }}
+                size="sm"
+                className="w-full"
+                styles={{
+                  input: { 
+                    height: 40, 
+                    fontSize: '15px', 
+                    borderColor: '#E5E7EB', 
+                    borderRadius: 8,
+                    '&:focus': {
+                      borderColor: '#0000FF',
+                      boxShadow: '0 0 0 2px rgba(0, 0, 255, 0.1)'
+                    }
+                  }
+                }}
+                required
+              />
+            </div>
+
+            {/* Forgot Password - Compact */}
+            <div className="text-right">
+              <Button 
+                variant="subtle" 
+                size="xs" 
+                onClick={handleForgotPassword}
+                className="text-blue-600 hover:text-blue-700 p-0 h-auto text-xs"
+              >
+                Forgot password?
+              </Button>
+            </div>
+
+            {/* Error Message - Compact */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-md p-2">
+                <Text className="text-red-600 text-xs text-center">{error}</Text>
               </div>
-            ) : (
-              <Button type="submit" size="md" fullWidth style={{ backgroundColor: '#0000FF', height: 48, borderRadius: 10, fontSize: '1rem', fontWeight: 600 }}>Sign In</Button>
             )}
-          </Stack>
-        </form>
+
+            {/* Compact Sign In Button */}
+            <Button
+              type="submit"
+              size="sm"
+              fullWidth
+              disabled={loading}
+              className="h-9 text-sm font-medium mt-4"
+              style={{ 
+                backgroundColor: loading ? '#9CA3AF' : '#0000FF',
+                borderRadius: 8,
+                border: 'none'
+              }}
+            >
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <Loader size="xs" color="white" className="mr-1" />
+                  Signing in...
+                </div>
+              ) : (
+                'Sign In'
+              )}
+            </Button>
+          </form>
+
+          {/* Compact Sign Up Link */}
+          <div className="mt-4 text-center">
+            <Text className="text-xs text-gray-600">
+              No account?{' '}
+              <Button 
+                variant="subtle" 
+                onClick={handleSignUp}
+                className="text-blue-600 hover:text-blue-700 p-0 h-auto text-xs font-medium"
+              >
+                Sign up
+              </Button>
+            </Text>
+          </div>
+        </div>
       </div>
-    </Container>
+    </div>
   )
 }
 
