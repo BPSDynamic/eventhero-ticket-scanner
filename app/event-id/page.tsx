@@ -1,7 +1,7 @@
 "use client"
 import {useState, useMemo, useCallback} from 'react'
 import {useRouter} from 'next/navigation'
-import {Container, TextInput, Button, Title, Text, Stack, Loader} from '@mantine/core'
+import {TextInput, Button, Title, Text, Loader} from '@mantine/core'
 import {EventheroLogoIcon} from '../../src/components/icons/EventheroLogoIcon'
 import {getEvent} from '../../src/services/api'
 import { useEvent } from '../../src/contexts/EventContext'
@@ -129,11 +129,19 @@ export default function EventIdPage() {
                         )}
                     </div>
 
-                    {/* Helper Text */}
-                    <div className="text-center pt-3">
+                    {/* Alternative Option */}
+                    <div className="text-center pt-3 space-y-2">
                         <Text className="text-xs text-gray-400">
-                            Need help? Contact support
+                            Don&apos;t know your Event ID?
                         </Text>
+                        <Button
+                            variant="subtle"
+                            size="xs"
+                            onClick={() => router.push('/scan?autoDetect=true')}
+                            className="text-blue-600 hover:text-blue-700 text-xs font-medium"
+                        >
+                            Scan QR code to auto-detect
+                        </Button>
                     </div>
                 </div>
             </div>

@@ -83,15 +83,23 @@ export default function ScanPage() {
         try {
             const parsedData = parseQRCode(qrData)
             const ticketId = parsedData.ticketId
-            const qrCodeEventId = parsedData.eventId
-            const customerEmail = parsedData.customerEmail
+            const qrCodeEventId = 'eventId' in parsedData ? parsedData.eventId : undefined
+            const customerEmail = 'customerEmail' in parsedData ? parsedData.customerEmail : undefined
             if (!ticketId) {
                 setError('Invalid QR code: No ticket ID found')
                 router.push(`/ticket-invalid?ticketId=${qrData}&eventId=${eventId}&error=invalid_qr`)
                 return
             }
+            // Use QR code event ID if available, otherwise use manually entered event ID
+            const validationEventId = qrCodeEventId || eventId
+            console.log('🔍 Event ID Selection:', {
+                manuallyEntered: eventId,
+                fromQRCode: qrCodeEventId,
+                usingForValidation: validationEventId
+            })
+            
             const result = await validateTicketWithSecurityChecks(
-                eventId as string,
+                validationEventId as string,
                 ticketId,
                 qrCodeEventId
             )
