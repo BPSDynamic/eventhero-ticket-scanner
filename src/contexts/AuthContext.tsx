@@ -4,7 +4,7 @@ import { signIn, signOut, getCurrentUser } from 'aws-amplify/auth'
 type AuthContextType = {
   user: unknown
   loading: boolean
-  signIn: (email: string, password: string) => Promise<void>
+  signIn: (email: string, password: string) => Promise<unknown>
   signOut: () => Promise<void>
 }
 
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } else {
           setUser(currentUser)
         }
-      } catch (error) {
+      } catch {
         // If getCurrentUser fails, user is not authenticated
         console.log('No authenticated user found')
         setUser(null)
