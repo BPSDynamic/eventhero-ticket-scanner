@@ -390,6 +390,7 @@ export const getEvent = async (eventId: string) => {
 
             if (result.errors && result.errors.length > 0) {
                 console.error('❌ GraphQL Query Error:', result.errors)
+                console.error('❌ Error details:', JSON.stringify(result.errors, null, 2))
                 return {
                     found: false,
                     error: 'Failed to fetch event data - API error'
@@ -413,11 +414,12 @@ export const getEvent = async (eventId: string) => {
                 const event = {
                     EventID: eventItem.GSI1PK || eventItem.EventID,
                     EventName: eventItem.EventName || `Event ${eventId}`,
-                    Venue: eventItem.VenueAddress || 'Venue not specified',
-                    StartDate: eventItem.EventDate || 'Date not specified',
+                    Venue: 'Venue not specified',
+                    StartDate: 'Date not specified',
                     PosterURL: eventItem.EventThumbnail,
-                    Description: `${eventItem.EventName || 'Event'} at ${eventItem.VenueAddress || 'venue location'}`
+                    Description: `${eventItem.EventName || 'Event'} at venue location`
                 }
+                console.log('✅ Event found:', event)
                 return {
                     found: true,
                     event
