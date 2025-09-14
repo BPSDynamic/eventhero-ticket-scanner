@@ -12,7 +12,7 @@ export default function ScanPage() {
     const paramEventId = searchParams.get('eventId')
     const { eventId: ctxEventId } = useEvent()
     const eventId = paramEventId || ctxEventId || ''
-    const [loading, setLoading] = useState(false)
+    // const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [scanned, setScanned] = useState(false)
     const [isValidating, setIsValidating] = useState(false)
@@ -47,7 +47,7 @@ export default function ScanPage() {
                     } else if (videoDevices.length > 0) {
                         setCurrentDeviceId(videoDevices[0].deviceId)
                     }
-                } catch (err) {
+                } catch {
                     setCameraPermission(false)
                 }
             } else {
@@ -115,8 +115,8 @@ export default function ScanPage() {
                 })
                 router.push(`/ticket-invalid?${errorParams.toString()}`)
             }
-        } catch (err) {
-            console.error('🚨 Scan error:', err)
+        } catch (error) {
+            console.error('🚨 Scan error:', error)
             setError('Ticket validation failed')
             router.push(`/ticket-invalid?ticketId=${qrData}&eventId=${eventId}&error=system_error`)
         } finally {
@@ -133,7 +133,7 @@ export default function ScanPage() {
         try {
             await navigator.mediaDevices.getUserMedia({video: true})
             setCameraPermission(true)
-        } catch (err) {
+        } catch {
             setCameraPermission(false)
         }
     }

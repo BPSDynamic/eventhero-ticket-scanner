@@ -21,7 +21,7 @@ export default function SignIn() {
     try {
       await signIn(email, password)
       router.push('/event-id')
-    } catch (err) {
+    } catch {
       setError('Invalid email or password')
     }
   }

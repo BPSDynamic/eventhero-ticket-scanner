@@ -81,14 +81,16 @@ export const validateTicketWithSecurityChecks = async (
                 },
                 nextToken
             }
-            const { data, error } = await client.query({
+            const result = await client.query({
                 query: VALIDATE_TICKET,
                 variables,
                 fetchPolicy: 'network-only'
             })
 
-            if (error) {
-                console.error('❌ Validation GraphQL Error:', error)
+            const { data } = result
+
+            if (result.errors && result.errors.length > 0) {
+                console.error('❌ Validation GraphQL Error:', result.errors)
                 return {
                     valid: false,
                     error: 'Ticket validation failed due to API error',
@@ -303,7 +305,7 @@ export const admitTicket = async (ticketId: string, customerEmail: string) => {
     try {
         const currentTime = new Date().toISOString()
         
-        const { data, error } = await client.mutate({
+        const result = await client.mutate({
             mutation: ADMIT_TICKET,
             variables: {
                 input: {
@@ -316,8 +318,10 @@ export const admitTicket = async (ticketId: string, customerEmail: string) => {
             }
         })
 
-        if (error) {
-            console.error('❌ Admission Mutation Error:', error)
+        const { data } = result
+
+        if (result.errors && result.errors.length > 0) {
+            console.error('❌ Admission Mutation Error:', result.errors)
             return {
                 success: false,
                 error: 'Failed to update ticket status - API error'
@@ -376,14 +380,16 @@ export const getEvent = async (eventId: string) => {
                 nextToken
             }
 
-            const { data, error } = await client.query({
+            const result = await client.query({
                 query: GET_EVENT,
                 variables,
                 fetchPolicy: 'network-only'
             })
 
-            if (error) {
-                console.error('❌ GraphQL Query Error:', error)
+            const { data } = result
+
+            if (result.errors && result.errors.length > 0) {
+                console.error('❌ GraphQL Query Error:', result.errors)
                 return {
                     found: false,
                     error: 'Failed to fetch event data - API error'

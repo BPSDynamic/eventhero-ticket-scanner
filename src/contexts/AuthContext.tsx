@@ -28,14 +28,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } else {
           setUser(currentUser)
         }
-      } catch (e) {
+      } catch {
         setUser(null)
       } finally {
         setLoading(false)
       }
     }
     init()
-  }, [])
+  }, [INACTIVITY_LIMIT_MS])
 
   useEffect(() => {
     const updateActivity = () => {
@@ -50,15 +50,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [])
 
-  const checkUser = async () => {
-    try {
-      const currentUser = await getCurrentUser()
-      setUser(currentUser)
-    } catch (error) {
-      setUser(null)
-    }
-    setLoading(false)
-  }
+  // const checkUser = async () => {
+  //   try {
+  //     const currentUser = await getCurrentUser()
+  //     setUser(currentUser)
+  //   } catch {
+  //     setUser(null)
+  //   }
+  //   setLoading(false)
+  // }
 
   const handleSignIn = async (email: string, password: string) => {
     try {
