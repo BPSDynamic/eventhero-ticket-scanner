@@ -89,12 +89,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // User not authenticated, proceed with sign in
       }
       
-      const user = await signIn({ username: email, password })
-      setUser(user)
+      const signedInUser = await signIn({ username: email, password })
+      setUser(signedInUser)
       const now = Date.now()
       lastActiveRef.current = now
       localStorage.setItem('lastActiveAt', String(now))
-      return user
+      return signedInUser
     } catch (error) {
       console.error('Sign in error:', error)
       throw error
